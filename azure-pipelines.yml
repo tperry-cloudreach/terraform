@@ -7,8 +7,8 @@
 resources:
   pipelines:
   - pipeline: terraform-cd   # Name of the pipeline resource
-    source: tperry-cloudreach.terraform # Name of the pipeline referenced by the pipeline resource
-    trigger: true # Run terraform-cd pipeline when any run of tperry-cloudreach.terraform pipeline completes
+    source: terraform-ci # Name of the pipeline referenced by the pipeline resource
+    trigger: true # Run terraform-cd pipeline when any run of terraform-ci pipeline completes
 
 pool:
   vmImage: ubuntu-latest
