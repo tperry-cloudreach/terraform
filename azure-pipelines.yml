@@ -10,14 +10,45 @@ resources:
     source: terraform-ci # Name of the pipeline referenced by the pipeline resource
     trigger: true # Run terraform-cd pipeline when any run of terraform-ci pipeline completes
 
-pool:
-  vmImage: ubuntu-latest
+variables:
+  # There must be an Azure Service Connection with that name defined in your Azure DevOps settings. See https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops
+  serviceConnection: 'terraform-basic-testing-azure-connection'
+  azureLocation: 'uksouth'
+  # Terraform settings
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/samples/integration-testing/src'
+  terraformVersion: '1.0.4'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: TerraformContinuousDeployment
+    displayName: Terraform Module - CD
+    jobs:
+    - job: TerraformContinuousDeploymentJob
+      displayName: TerraformContinuousDeployment - CD Job
+      pool:
+        vmImage: ubuntu-20.04
+      steps:
+      # Step 1: install Terraform on the Azure Pipelines agent
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+        displayName: 'Install Terraform'
+        inputs:
+          terraformVersion: $(terraformVersion)
+      # Step 3: run Terraform init to initialize the workspace
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+        displayName: 'Run terraform init'
+        inputs:
+          command: init
+          workingDirectory: $(terraformWorkingDirectory)
+      # Step 4: run Terraform validate to validate HCL syntax
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+        displayName: 'Run terraform validate'
+        inputs:
+          command: validate
+          workingDirectory: $(terraformWorkingDirectory)
+      # Step 5: run Terraform plan to validate HCL syntax
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+        displayName: 'Run terraform plan'
+        inputs:
+          command: apply
+          workingDirectory: $(terraformWorkingDirectory)
+          environmentServiceName: $(serviceConnection)
+          commandOptions: -var location=$(azureLocation)
