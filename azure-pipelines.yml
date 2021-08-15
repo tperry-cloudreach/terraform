@@ -46,7 +46,7 @@ stages:
           workingDirectory: $(terraformWorkingDirectory)
       # Step 5: run Terraform plan to validate HCL syntax
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-        displayName: 'Run terraform plan'
+        displayName: 'Run terraform apply'
         inputs:
           command: apply
           workingDirectory: $(terraformWorkingDirectory)
