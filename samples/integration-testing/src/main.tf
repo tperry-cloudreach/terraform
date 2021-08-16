@@ -14,8 +14,6 @@ terraform {
 
 }
 
-resource "random_uuid" "uuid" {}
-
 resource "azurerm_resource_group" "rg" {
   name     = "rg-hello-tf"
   location = var.location
