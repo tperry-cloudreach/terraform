@@ -30,7 +30,7 @@ stages:
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'terraform-basic-testing-azure-connection'
-          scriptType: 'ps'
+          scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
             az --version
