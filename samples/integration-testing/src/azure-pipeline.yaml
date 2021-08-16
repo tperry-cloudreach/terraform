@@ -12,7 +12,7 @@ trigger:
 variables:
   # There must be an Azure Service Connection with that name defined in your Azure DevOps settings. See https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops
   serviceConnection: 'terraform-basic-testing-azure-connection'
-  azureLocation: 'westeurope'
+  azureLocation: 'uksouth'
   # Terraform settings
   terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/samples/integration-testing/src'
   terraformVersion: '1.0.4'
@@ -30,9 +30,11 @@ stages:
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'terraform-basic-testing-azure-connection'
-          scriptType: 'bash'
+          scriptType: 'ps'
           scriptLocation: 'inlineScript'
-          inlineScript: 'az login --service-principal -u $(spn_id) -p $(spn_pwd) --tenant $(tenant_id)'
+          inlineScript: |
+            az --version
+            az account show
       # Step 1: run the Checkov Static Code Analysis
       - bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)
         displayName: Checkov Static Code Analysis
