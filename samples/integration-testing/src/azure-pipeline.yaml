@@ -35,6 +35,7 @@ stages:
           inlineScript: |
             az --version
             az account show
+          workingDirectory: '$(System.DefaultWorkingDirectory)/samples/integration-testing/src'
       # Step 1: run the Checkov Static Code Analysis
       - bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)
         displayName: Checkov Static Code Analysis
