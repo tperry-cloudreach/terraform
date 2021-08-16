@@ -27,15 +27,10 @@ stages:
         vmImage: ubuntu-20.04
       steps:
       # Step 0: Authenticate with Azure
-      - task: AzureCLI@2
+      - task: Bash@3
         inputs:
-          azureSubscription: 'terraform-basic-testing-azure-connection'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az --version
-            az account show
-          workingDirectory: '$(System.DefaultWorkingDirectory)/samples/integration-testing/src'
+          targetType: 'inline'
+          script: 'az login --service-principal -u $(spn_id) -p $(spn_pwd) --tenant $(tenant_id)'
       # Step 1: run the Checkov Static Code Analysis
       - bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)
         displayName: Checkov Static Code Analysis
