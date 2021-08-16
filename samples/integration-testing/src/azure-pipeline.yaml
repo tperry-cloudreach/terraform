@@ -30,7 +30,11 @@ stages:
       - task: Bash@3
         inputs:
           targetType: 'inline'
-          script: 'az login --service-principal -u $(spn_id) -p $(spn_pwd) --tenant $(tenant_id)'
+          script: |
+            export ARM_CLIENT_ID=$(SPN_ID)
+            export ARM_CLIENT_SECRET=$(SPN_PWD)
+            export ARM_SUBSCRIPTION_ID=$(SUB_ID)
+            export ARM_TENANT_ID=$(TENANT_ID)
       # Step 1: run the Checkov Static Code Analysis
       - bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)
         displayName: Checkov Static Code Analysis
