@@ -16,6 +16,7 @@ terraform {
 resource "azurerm_resource_group" "rg" {
   name     = local.apps_resource_group_name
   location = local.region
+  tags =  local.tags
 }
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
