@@ -14,7 +14,7 @@ variables:
   serviceConnection: 'terraform-basic-testing-azure-connection'
   azureLocation: 'uksouth'
   # Terraform settings
-  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/samples/integration-testing/src'
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/samples/domain-controller/src'
   terraformVersion: '1.0.4'
 
 stages:
