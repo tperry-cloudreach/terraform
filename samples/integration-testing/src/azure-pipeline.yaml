@@ -43,18 +43,36 @@ stages:
       # Step 3: run Terraform init to initialize the workspace
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform init'
+        env: {
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID),
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET),
+          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID),
+          ARM_TENANT_ID: $(ARM_TENANT_ID)
+        }
         inputs:
           command: init
           workingDirectory: $(terraformWorkingDirectory)
       # Step 4: run Terraform validate to validate HCL syntax
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform validate'
+        env: {
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID),
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET),
+          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID),
+          ARM_TENANT_ID: $(ARM_TENANT_ID)
+        }
         inputs:
           command: validate
           workingDirectory: $(terraformWorkingDirectory)
       # Step 5: run Terraform plan to validate HCL syntax
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform plan'
+        env: {
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID),
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET),
+          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID),
+          ARM_TENANT_ID: $(ARM_TENANT_ID)
+        }
         inputs:
           command: plan
           workingDirectory: $(terraformWorkingDirectory)
