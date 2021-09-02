@@ -10,7 +10,7 @@ variables:
   serviceConnection: 'terraform-basic-testing-azure-connection'
   azureLocation: 'uksouth'
   # Terraform settings
-  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/samples/integration-testing/src'
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/samples/domain-controller/src'
   terraformVersion: '1.0.4'
 
 stages:
@@ -31,10 +31,10 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform init'
         env: {
-          ARM_CLIENT_ID: $(ARM_CLIENT_ID),
-          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET),
-          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID),
-          ARM_TENANT_ID: $(ARM_TENANT_ID)
+          ARM_CLIENT_ID: $(ARMClientID),
+          ARM_CLIENT_SECRET: $(ARMClientSecret),
+          ARM_SUBSCRIPTION_ID: $(ARMSubscriptionID),
+          ARM_TENANT_ID: $(ARMTenantId)
         }
         inputs:
           command: init
@@ -43,10 +43,10 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform validate'
         env: {
-          ARM_CLIENT_ID: $(ARM_CLIENT_ID),
-          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET),
-          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID),
-          ARM_TENANT_ID: $(ARM_TENANT_ID)
+          ARM_CLIENT_ID: $(ARMClientID),
+          ARM_CLIENT_SECRET: $(ARMClientSecret),
+          ARM_SUBSCRIPTION_ID: $(ARMSubscriptionID),
+          ARM_TENANT_ID: $(ARMTenantId)
         }
         inputs:
           command: validate
@@ -55,14 +55,13 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform apply'
         env: {
-          ARM_CLIENT_ID: $(ARM_CLIENT_ID),
-          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET),
-          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID),
-          ARM_TENANT_ID: $(ARM_TENANT_ID)
+          ARM_CLIENT_ID: $(ARMClientID),
+          ARM_CLIENT_SECRET: $(ARMClientSecret),
+          ARM_SUBSCRIPTION_ID: $(ARMSubscriptionID),
+          ARM_TENANT_ID: $(ARMTenantId)
         }
         inputs:
           command: apply
           workingDirectory: $(terraformWorkingDirectory)
           environmentServiceName: $(serviceConnection)
-          commandOptions: -var location=$(azureLocation)
           
