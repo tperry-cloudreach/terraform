@@ -33,8 +33,9 @@ stages:
           script: |
             echo "$ARM_TENANT_ID"
       # Step 1: run the Checkov Static Code Analysis
-      - bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)
-        displayName: Checkov Static Code Analysis
+      - task: Bash@3
+        inputs:
+          filePath: '$(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory)'
       # Step 2: install Terraform on the Azure Pipelines agent
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Install Terraform'
