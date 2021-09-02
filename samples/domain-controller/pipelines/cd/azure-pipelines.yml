@@ -15,7 +15,7 @@ variables:
 
 stages:
   - stage: TerraformContinuousDeployment
-    displayName: Terraform Module - CD
+    displayName: Domain Controller Module - CD
     jobs:
     - job: TerraformContinuousDeploymentJob
       displayName: TerraformContinuousDeployment - CD Job
@@ -27,7 +27,7 @@ stages:
         displayName: 'Install Terraform'
         inputs:
           terraformVersion: $(terraformVersion)
-      # Step 3: run Terraform init to initialize the workspace
+      # Step 2: run Terraform init to initialize the workspace
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform init'
         env: {
@@ -39,7 +39,7 @@ stages:
         inputs:
           command: init
           workingDirectory: $(terraformWorkingDirectory)
-      # Step 4: run Terraform validate to validate HCL syntax
+      # Step 3: run Terraform validate to validate HCL syntax
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform validate'
         env: {
@@ -51,7 +51,7 @@ stages:
         inputs:
           command: validate
           workingDirectory: $(terraformWorkingDirectory)
-      # Step 5: run Terraform plan to validate HCL syntax
+      # Step 4: run Terraform plan to validate HCL syntax
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
         displayName: 'Run terraform apply'
         env: {
