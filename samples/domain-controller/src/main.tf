@@ -27,7 +27,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
     name                = "myVnet"
     address_space       = ["10.0.0.0/16"]
     location            = local.region
-    resource_group_name = local.apps_resource_group_name
+    resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
 
     tags = local.tags
 }
@@ -35,7 +35,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
 # Create subnet
 resource "azurerm_subnet" "myterraformsubnet" {
     name                 = "mySubnet"
-    resource_group_name  = local.apps_resource_group_name
+    resource_group_name  = "${azurerm_resource_group.myterraformgroup.name}"
     virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
     address_prefixes       = ["10.0.1.0/24"]
 }
@@ -44,7 +44,7 @@ resource "azurerm_subnet" "myterraformsubnet" {
 resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = local.region
-    resource_group_name          = local.apps_resource_group_name
+    resource_group_name          = "${azurerm_resource_group.myterraformgroup.name}"
     allocation_method            = "Dynamic"
 
     tags = local.tags
@@ -54,7 +54,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 resource "azurerm_network_security_group" "myterraformnsg" {
     name                = "myNetworkSecurityGroup"
     location            = local.region
-    resource_group_name = local.apps_resource_group_name
+    resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
 
     security_rule {
         name                       = "RDP"
@@ -75,7 +75,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 resource "azurerm_network_interface" "myterraformnic" {
     name                      = "myNIC"
     location                  = local.region
-    resource_group_name       = local.apps_resource_group_name
+    resource_group_name       = "${azurerm_resource_group.myterraformgroup.name}"
 
     ip_configuration {
         name                          = "myNicConfiguration"
@@ -97,7 +97,7 @@ resource "azurerm_network_interface_security_group_association" "nicnsgassociati
 resource "random_id" "randomId" {
     keepers = {
         # Generate a new ID only when a new resource group is defined
-        resource_group = local.apps_resource_group_name
+        resource_group = "${azurerm_resource_group.myterraformgroup.name}"
     }
 
     byte_length = 8
@@ -105,7 +105,7 @@ resource "random_id" "randomId" {
 # Create virtual machine
 resource "azurerm_windows_virtual_machine" "domaincontroller" {
   name                = "adds-dc-01"
-  resource_group_name = local.apps_resource_group_name
+  resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
   location            = local.region
   size                = "Standard_F2"
   admin_username      = "adminuser"
