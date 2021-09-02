@@ -13,10 +13,9 @@ terraform {
     }
 
 }
-
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-hello-tf"
-  location = var.location
+  name     = local.apps_resource_group_name
+  location = local.region
 }
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
@@ -24,5 +23,10 @@ resource "azurerm_virtual_network" "vnet" {
     address_space       = ["10.0.0.0/16"]
     location            = var.location
     resource_group_name = azurerm_resource_group.rg.name
-    tags = var.tags
+    tags = merge(
+    {
+      env = local.environment
+    },
+    local.tags
+  )
 }
